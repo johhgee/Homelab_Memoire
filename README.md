@@ -5,6 +5,14 @@ Pour se faire, je me suis inspiré d'un projet existant : [SOC-OpenSource](https
 
 Ce dépôt a pour objectif de présenter les outils utilisés ainsi que les processus d'installation et de configuration nécessaires pour mettre en place un SOC automatisé.
 
+## 
+
+![alt text](images/image.png)
+
+##
+
+![alt text](images/image-1.png)
+
 ## Table des matières
 1. [Introduction](#introduction)
 2. [Composants](#composants)
