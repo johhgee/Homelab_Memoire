@@ -1,0 +1,7 @@
+--
+- import_playbook: install_test.yml
+# - import_playbook: install_elksiem.yml
+# - import_playbook: install_thehive.yml
+# - import_playbook: install_cortex.yml
+# - import_playbook: install_misp.yml
+# - import_playbook: install_shuffle.yml
