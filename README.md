@@ -1,5 +1,5 @@
 # SOC Next Gen w/ Open source tools
-J'ai rédigé un mémoire nommé "Mise en place et gestion d'un SOC automatisé avec des outils open-sources.
+J'ai rédigé un mémoire ayant pour sujet "Mise en place et gestion d'un SOC automatisé avec des outils open-sources".
 
 Pour se faire, je me suis inspiré d'un projet existant : [SOC-OpenSource](https://github.com/BlackPerl-DFIR/SOC-OpenSource).
 
