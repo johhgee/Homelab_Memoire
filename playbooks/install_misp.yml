@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: ensure folder exist
+    file:
+      path: misp
+      state: directory
+  
+  - name: copy Docker Compose files
+    copy:
+      src: ../files/misp/{{ item }}
+      dest: misp/{{ item }}
+    loop:
+    - docker-compose.yml
+    - .env
+
+  # - name: deploy Docker Compose stack
+  #   community.docker.docker_compose_v2:
+  #     project_src: misp/
+  #     files:
+  #     - docker-compose.yml
+  #     state: present
+
+  # - name: deploy docker compose
+  #   shell: docker compose up -d
+  #   args:
+  #     chdir: misp/
