@@ -1,0 +1,89 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Uninstall old versions
+    ansible.builtin.apt:
+      name:
+        - docker
+        - docker-engine
+        - docker.io
+        - containerd
+        - runc
+      state: absent
+
+  - name: Set up the repository
+    ansible.builtin.apt:
+      name:
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+  - name: check if /etc/apt/keyrings/docker.gpg already exists
+    ansible.builtin.command: ls /etc/apt/keyrings/docker.gpg
+    register: result_gpg
+    ignore_errors: true
+    changed_when: false
+
+  - name: Create directory for Docker’s official GPG key
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      state: directory
+    when: result_gpg is failed
+
+  - name: Add Docker's GPG key
+    ansible.builtin.get_url:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      dest: /etc/apt/keyrings/docker.gpg_armored
+      mode: '0644'
+      force: true
+    when: result_gpg is failed
+
+  - name: dearmor GPG key
+    shell: "gpg --dearmor <  /etc/apt/keyrings/docker.gpg_armored \
+            > /etc/apt/keyrings/docker.gpg && \
+            rm /etc/apt/keyrings/docker.gpg_armored"
+    when: result_gpg is failed
+
+  - name: Add Docker's official repository
+    ansible.builtin.apt_repository:
+      filename: docker
+      repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] \
+             https://download.docker.com/linux/{{ ansible_distribution | \
+             lower }} {{ ansible_distribution_release }} stable"
+    register: result_repo
+
+  - name: Install Docker
+    ansible.builtin.apt:
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-compose
+        - docker-compose-plugin
+        - python3-docker
+          #when: (result_gpg is succeeded) and (result_repo is succeeded)
+          #when: (result_gpg is failed) and (result_repo is failed)
+          #register: result_apt
+
+  - name: Add jonog user to docker group
+    ansible.builtin.user:
+      name: jonog
+      groups: docker
+      append: true
+        #when: result_apt is failed
+
+  - name: Creating /etc/docker directory with root as owner
+    file:
+      path: /etc/docker
+      state: directory
+      owner: root
+      group: root
+      mode: 0750
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
