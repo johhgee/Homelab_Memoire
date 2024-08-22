@@ -119,7 +119,7 @@ services:
       - "INIT=true"         
       - "CRON_USER_ID=1"   
       - "REDIS_FQDN=redis"
-      - "HOSTNAME=${MISP_HOSTNAME}"
+      - "BASEURL=${MISP_BASEURL}"
     networks:
       - TCM_NET
 

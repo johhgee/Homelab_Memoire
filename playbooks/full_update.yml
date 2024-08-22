@@ -16,4 +16,5 @@
           - plocate
           - bash-completion
           - git
+          - net-tools
           - tree
