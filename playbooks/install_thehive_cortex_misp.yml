@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+
+  - name: ensure folder exist
+    file:
+      path: TCM
+      state: directory
+  
+  - name: copy Docker Compose files
+    copy:
+      src: ../files/thehive_cortex_misp/{{ item }}
+      dest: TCM/{{ item }}
+    loop:
+    - docker-compose.yml
+    - .env
